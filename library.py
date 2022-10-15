@@ -42,6 +42,8 @@ from sklearn.pipeline import Pipeline
 # class OHETransformer(BaseEstimator, TransformerMixin):
 #   def __init__(self, target_column, dummy_na=False, drop_first=False):  
 #     self.target_column = target_column
+#     self.dummy_na = dummy_na
+#     self.drop_first = drop_first
 
 #   def fit(self, X, y = None):
 #     print(f"\nWarning: {self.__class__.__name__}.fit does nothing.\n")
@@ -49,9 +51,9 @@ from sklearn.pipeline import Pipeline
 
 #   def transform(self, X):
 #     assert isinstance(X, pd.core.frame.DataFrame), f'{self.__class__.__name__}.transform expected Dataframe but got {type(X)} instead.'
-#     assert self.target_column in X.columns.to_list(), f'{self.__class__.__name__}.transform unknown column "{self.target_column}"'  #column legit?
+#     assert self.target_column in X.columns.to_list(), f'{self.__class__.__name__}.transform unknown column "{self.target_column}"'  
 #     X_ = X.copy()
-#     X_ = pd.get_dummies(X_, columns=[self.target_column])
+#     X_ = pd.get_dummies(X_, columns=[self.target_column], dummy_na=self.dummy_na, drop_first=self.drop_first)
 #     return X_
 
 #   def fit_transform(self, X, y = None):
@@ -61,9 +63,10 @@ from sklearn.pipeline import Pipeline
 
 # class DropColumnsTransformer(BaseEstimator, TransformerMixin):
 #   def __init__(self, column_list, action='drop'):
+#     assert action in ['keep', 'drop'], f'{self.__class__.__name__} action {action} not in ["keep", "drop"]'
+#     assert isinstance(column_list, list), f'DropColumnsTransformer expected list but saw {type(column_list)}'
 #     self.column_list = column_list
 #     self.action = action
-#     assert action in ['keep', 'drop'], f'{self.__class__.__name__} action {action} not in ["keep", "drop"]'
 
 #   def fit(self, X, y = None):
 #     print(f"\nWarning: {self.__class__.__name__}.fit does nothing.\n")
@@ -71,22 +74,20 @@ from sklearn.pipeline import Pipeline
 
 #   def transform(self, X):
 #     assert isinstance(X, pd.core.frame.DataFrame), f'{self.__class__.__name__}.transform expected Dataframe but got {type(X)} instead.'
+#     remaining_set = set(self.column_list) - set(X.columns)
+#     # keys_absent = len(set(self.column_list) - set(X.columns)) != 0
 
-#     #now check to see if some keys are absent
-#     keys_absent = len(set(self.column_list) - set(X.columns)) != 0
 #     X_ = X.copy()
-#     if self.action=="keep":
-#       if keys_absent:
-#         assert len(set(self.column_list) - set(X_.columns)) == 0, f'{self.__class__.__name__}.transform unknown column "{self.column_list}"'  #column legit?
+#     if self.action=='drop':
+#       if remaining_set:
+#         print(f"\nWarning: {self.__class__.__name__} does not contain these columns to drop: {remaining_set}.")
+#       X_ = X_.drop(columns=self.column_list, errors='ignore')
+#     else:
+#       assert not remaining_set, f'{self.__class__.__name__}.transform unknown columns to keep: {remaining_set}'
 #       X_ = X_[self.column_list]
-#     elif self.action=="drop":
-#       if keys_absent:
-#         print(f"\nWarning: {self.__class__.__name__}[{X_.columns}] does not contain some values for these keys {set(self.column_list)-set(X_.columns)}\n")
-#       X_ = X_.drop(columns=self.column_list, errors="ignore")
 #     return X_
 
 #   def fit_transform(self, X, y = None):
 #     result = self.transform(X)
 #     return result
-  
-  
+ 
