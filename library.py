@@ -4,9 +4,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 
 
-
 class MappingTransformer(BaseEstimator, TransformerMixin):
-  
   def __init__(self, mapping_column, mapping_dict:dict):
     assert isinstance(mapping_dict, dict), f'{self.__class__.__name__} constructor expected dictionary but got {type(mapping_dict)} instead.'
     self.mapping_dict = mapping_dict
