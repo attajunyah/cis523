@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import MinMaxScaler
 
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
