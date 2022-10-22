@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import MinMaxScaler
+
 
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
@@ -149,6 +149,7 @@ class TukeyTransformer(BaseEstimator, TransformerMixin):
 
   
 class MinMaxTransformer(BaseEstimator, TransformerMixin):
+  from sklearn.preprocessing import MinMaxScaler
   def __init__(self):
     pass #takes no arguments
 
