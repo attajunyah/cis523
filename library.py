@@ -161,7 +161,7 @@ class MinMaxTransformer(BaseEstimator, TransformerMixin):
 
     scaler = MinMaxScaler()
     fit_transformer = scaler.fit_transform(X_)
-    X2_ = pd.DataFrame(fit_transformer,columns=[X_.columns])
+    X2_ = pd.DataFrame(fit_transformer,columns=X_.columns)
     return X2_
 
   def fit_transform(self, X, y = None):
