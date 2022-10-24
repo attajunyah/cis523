@@ -167,7 +167,7 @@ class MinMaxTransformer(BaseEstimator, TransformerMixin):
     result = self.transform(X)
     return result
 
-  from sklearn.base import BaseEstimator, TransformerMixin
+  
 class KNNTransformer(BaseEstimator, TransformerMixin):
   def __init__(self,n_neighbors=5, weights="uniform"):
     #your code
