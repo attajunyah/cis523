@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.neighbors import KNeighborsClassifier
 
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
@@ -191,5 +192,24 @@ class KNNTransformer(BaseEstimator, TransformerMixin):
     return result
 
 
+def find_random_state(features_df, labels, n=200):
+  model = KNeighborsClassifier()
+  var = []
+  for i in np.arange(1, n):
+  
+    train_X , test_X, train_y, test_y = train_test_split(transformed_df, labels, test_size=0.2, shuffle=True,
+                                                    random_state=i, stratify=labels)
+    model = KNeighborsClassifier()
+    model.fit(train_X, train_y)  #train model
+    train_pred = model.predict(train_X)           #predict against training set
+    test_pred = model.predict(test_X)             #predict against test set
+    train_f1 = f1_score(train_y, train_pred)   #F1 on training predictions
+    test_f1 = f1_score(test_y, test_pred)      #F1 on test predictions
+    f1_ratio = test_f1/train_f1          #take the ratio
+    var.append(f1_ratio)
+
+  rs_value = sum(var)/len(var)  #get average ratio value
+  idx = np.array(abs(var - rs_value)).argmin()
+  return idx
 
  
