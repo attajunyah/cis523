@@ -9,6 +9,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from sklearn.experimental import enable_halving_search_cv
 from sklearn.model_selection import HalvingGridSearchCV
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense, Activation, Dropout
+import tensorflow as tf
+from tensorflow import keras
 
 
 class MappingTransformer(BaseEstimator, TransformerMixin):
